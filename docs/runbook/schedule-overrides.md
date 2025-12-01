@@ -56,11 +56,11 @@ Contact
 ## Screenshots (placeholders)
 For quick visual guidance, example placeholder images are stored in `docs/runbook/assets/` and will be replaced by real screenshots when available.
 
-![Schedule list](assets/schedule_list_filters.svg)
+![Schedule list filters](assets/schedule_list_filters.png)
 
-![Bulk actions](assets/schedule_bulk_action_menu.svg)
+![Bulk actions](assets/schedule_bulk_action_menu.png)
 
-![Schedule change form](assets/schedule_change_form.svg)
+![Schedule change form](assets/schedule_change_form.png)
 
 ### How to capture screenshots (Windows 10/11, recommended)
 1. Open the Admin page you want to capture in your browser (Chrome/Edge/Firefox).
