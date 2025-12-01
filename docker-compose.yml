@@ -1,0 +1,66 @@
+version: '3.8'
+
+services:
+  redis:
+    image: redis:7
+    restart: unless-stopped
+    ports:
+      - '6379:6379'
+
+  db:
+    image: postgres:15
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: irib_db
+      POSTGRES_USER: irib_user
+      POSTGRES_PASSWORD: irib_pass
+    volumes:
+      - db_data:/var/lib/postgresql/data
+    ports:
+      - '5432:5432'
+
+  web:
+    build:
+      context: .
+      dockerfile: Dockerfile.dev
+    volumes:
+      - .:/code
+    ports:
+      - '8000:8000'
+    environment:
+      - CELERY_BROKER_URL=redis://redis:6379/0
+      - DATABASE_URL=postgres://irib_user:irib_pass@db:5432/irib_db
+    depends_on:
+      - redis
+    command: bash -c "python manage.py migrate --noinput; python manage.py runserver 0.0.0.0:8000"
+
+  worker:
+    build:
+      context: .
+      dockerfile: Dockerfile.dev
+    volumes:
+      - .:/code
+    depends_on:
+      - redis
+      - web
+    environment:
+      - CELERY_BROKER_URL=redis://redis:6379/0
+      - DATABASE_URL=postgres://irib_user:irib_pass@db:5432/irib_db
+    command: celery -A irib_programs worker -l info
+
+  beat:
+    build:
+      context: .
+      dockerfile: Dockerfile.dev
+    volumes:
+      - .:/code
+    depends_on:
+      - redis
+      - web
+    environment:
+      - CELERY_BROKER_URL=redis://redis:6379/0
+      - DATABASE_URL=postgres://irib_user:irib_pass@db:5432/irib_db
+    command: celery -A irib_programs beat -l info
+
+volumes:
+  db_data:

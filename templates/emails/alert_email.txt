@@ -1,0 +1,10 @@
+{{ alert.get_trigger_display }}
+
+{{ alert.message }}
+
+{% if schedule and schedule.program_instance %}
+برنامه: {{ schedule.program_instance.program.title }}
+زمان برنامه: {{ schedule.program_instance.scheduled_start }}
+{% endif %}
+
+این ایمیل خودکار است — لطفاً پاسخ ندهید.

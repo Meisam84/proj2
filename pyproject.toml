@@ -1,0 +1,18 @@
+[tool.ruff]
+line-length = 120
+select = ["E", "F", "W", "C", "I", "B"]
+extend-ignore = ["D"]
+exclude = ["programs/migrations", "**/migrations/**", ".venv", "venv", "build"]
+
+[tool.ruff.per-file-ignores]
+"programs/models.py" = ["E501"]
+"programs/admin.py" = ["E501"]
+"programs/views_timeline.py" = ["E501", "C901"]
+"programs/api/views.py" = ["E501"]
+
+[tool.black]
+line-length = 120
+target-version = ['py311']
+
+[tool.isort]
+profile = "black"

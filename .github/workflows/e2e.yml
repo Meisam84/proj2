@@ -1,0 +1,37 @@
+name: E2E (Mailtrap + Twilio)
+
+on:
+  # Manual trigger or push to the protected `e2e` branch only
+  workflow_dispatch:
+  push:
+    branches: [ e2e ]
+jobs:
+  e2e:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.11'
+
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+
+      - name: Run E2E test (Mailtrap + Twilio)
+        env:
+          EMAIL_HOST: smtp.mailtrap.io
+          EMAIL_PORT: '587'
+          EMAIL_HOST_USER: ${{ secrets.MAILTRAP_USER }}
+          EMAIL_HOST_PASSWORD: ${{ secrets.MAILTRAP_PASS }}
+          DEFAULT_FROM_EMAIL: no-reply@example.com
+          TWILIO_ACCOUNT_SID: ${{ secrets.TWILIO_ACCOUNT_SID }}
+          TWILIO_AUTH_TOKEN: ${{ secrets.TWILIO_AUTH_TOKEN }}
+          TWILIO_FROM_NUMBER: ${{ secrets.TWILIO_FROM_NUMBER }}
+          DJANGO_SETTINGS_MODULE: irib_programs.settings
+          SECRET_KEY: ci-secret
+        run: |
+          python manage.py migrate --noinput
+          python manage.py send_test_alert --create --method=both

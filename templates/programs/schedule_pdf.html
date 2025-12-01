@@ -1,0 +1,101 @@
+<!doctype html>
+<html lang="fa">
+
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <style>
+        body {
+            font-family: DejaVu Sans, Arial, Tahoma;
+            direction: rtl;
+        }
+
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .title {
+            font-size: 18px;
+            font-weight: 700
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 12px;
+        }
+
+        th,
+        td {
+            border: 1px solid #333;
+            padding: 6px;
+            text-align: right;
+        }
+
+        th {
+            background: #f0f0f0
+        }
+
+        .meta {
+            margin-top: 10px;
+            font-size: 12px
+        }
+
+        footer {
+            position: fixed;
+            bottom: 10px;
+            width: 100%;
+            text-align: center;
+            font-size: 11px
+        }
+    </style>
+</head>
+
+<body>
+    <div class="header">
+        <div>
+            <div class="title">کنداکتور روزانه - {{ schedule.channel.name }}</div>
+            <div class="meta">تاریخ: {{ schedule.schedule_date }}</div>
+        </div>
+        <div>
+            <!-- placeholder for logo -->
+            <img src="/static/logo.png" alt="لوگو" style="height:48px;" />
+        </div>
+    </div>
+
+    <table>
+        <thead>
+            <tr>
+                <th>ردیف</th>
+                <th>عنوان برنامه</th>
+                <th>شروع</th>
+                <th>پایان</th>
+                <th>مدت</th>
+                <th>وضعیت</th>
+                <th>یادداشت</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for item in rows %}
+            <tr>
+                <td>{{ forloop.counter }}</td>
+                <td>{{ item.program_instance.program.title }}</td>
+                <td>{{ item.program_instance.scheduled_start|stringformat:"%H:%M:%S" }}</td>
+                <td>{{ item.program_instance.scheduled_end|stringformat:"%H:%M:%S" }}</td>
+                <td>{% widthratio item.program_instance.scheduled_end|time:item.program_instance.scheduled_start|time 60
+                    %}</td>
+                <td>{{ item.program_instance.get_status_display }}</td>
+                <td>{{ item.notes }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+    <footer>
+        گزارش تولید شده توسط سامانه — تاریخ و اوقات شرعی و مناسبت‌ها در سربرگ درج می‌شود
+    </footer>
+</body>
+
+</html>

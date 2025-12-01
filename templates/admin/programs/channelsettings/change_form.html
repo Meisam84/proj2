@@ -1,0 +1,12 @@
+{% extends "admin/change_form.html" %}
+
+{% load i18n admin_urls static %}
+
+{% block object-tools-items %}
+{{ block.super }}
+{% if change and show_run_e2e %}
+<li>
+    <a class="addlink" href="{% url 'admin:programs_channelsettings_run_e2e' original.pk %}">{% trans "Run E2E" %}</a>
+</li>
+{% endif %}
+{% endblock %}

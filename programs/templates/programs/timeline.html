@@ -1,0 +1,140 @@
+{% load static %}
+<!doctype html>
+<html lang="fa" dir="rtl">
+
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>کنداکتور روزانه - {{ channel.name }} - {{ date }}</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css">
+    <script src="https://unpkg.com/htmx.org@1.9.2"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Sortable/1.15.0/Sortable.min.js"></script>
+    <style>
+        .timeline {
+            min-height: 200px;
+        }
+
+        .item-locked {
+            opacity: 0.6;
+        }
+    </style>
+</head>
+
+<body class="bg-gray-100 p-6 font-sans">
+    <div class="max-w-7xl mx-auto">
+        <header class="flex items-center justify-between mb-4">
+            <div>
+                <h1 class="text-2xl font-bold">کنداکتور روزانه — {{ channel.name }}</h1>
+                <div class="text-sm text-gray-600">تاریخ: {{ date }}</div>
+            </div>
+            <div>
+                <a class="px-3 py-2 bg-blue-600 text-white rounded"
+                    href="/admin/programs/schedule/?schedule_date={{ date }}">پنل مدیریت</a>
+            </div>
+        </header>
+
+        <section class="bg-white p-4 rounded shadow">
+            <div id="schedule-list" class="grid grid-cols-1 gap-2 timeline">
+                {% for s in schedules %}
+                <div class="p-3 rounded border flex items-center justify-between {% if s.locked %}item-locked{% endif %}"
+                    data-sid="{{ s.id }}">
+                    <div>
+                        <div class="text-lg font-semibold">{{ s.program_instance.program.title }}</div>
+                        <div class="text-sm text-gray-500">{{ s.program_instance.episode_title }} — {{
+                            s.program_instance.program.broadcast_type }}</div>
+                    </div>
+                    <div class="text-right">
+                        <div class="text-sm">{{ s.program_instance.scheduled_start|time:'H:i:s' }} → {{
+                            s.program_instance.scheduled_end|time:'H:i:s' }}</div>
+                        <div class="text-xs text-gray-400">وضعیت: {{ s.program_instance.get_status_display }}</div>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+        </section>
+
+        <script>
+            // Enable drag & drop via Sortable. When order changes we send JSON updates to server.
+            (function () {
+                var el = document.getElementById('schedule-list');
+                var sortable = Sortable.create(el, {
+                    animation: 150,
+                    onEnd: function (evt) {
+                        // build updates
+                        var items = Array.from(el.querySelectorAll('[data-sid]'));
+                        var payload = items.map(function (node, idx) {
+                            var sid = node.getAttribute('data-sid');
+                            return { id: sid, order: idx + 1 };
+                        });
+                        fetch(window.location.pathname + 'reorder/', {
+                            method: 'POST',
+                            headers: { 'Content-Type': 'application/json', 'X-CSRFToken': getCookie('csrftoken') },
+                            body: JSON.stringify(payload)
+                        }).then(res => res.json()).then(data => {
+                            if (data.ok) {
+                                // if needed, refresh part of the page
+                                console.log('reorder ok', data);
+                            }
+                        })
+
+                        // Poll server for active alerts (unsent) for this channel
+                        function pollAlerts() {
+                            var chId = {{ channel.id
+                }};
+            fetch('/api/alerts/?sent=false&schedule__channel=' + chId)
+                .then(r => r.json())
+                .then(data => {
+                    if (data && data.length) {
+                        // show a visual alert
+                        if (!document.getElementById('alert-bar')) {
+                            var bar = document.createElement('div');
+                            bar.id = 'alert-bar';
+                            bar.className = 'fixed bottom-4 left-1/2 transform -translate-x-1/2 bg-red-600 text-white px-4 py-2 rounded shadow-lg';
+                            bar.innerHTML = 'هشدار: برنامه‌هایی هستند که تأیید نشده‌اند — <button id="ack-alerts" class="underline">نمایش</button>';
+                            document.body.appendChild(bar);
+                            playBeep();
+                            document.getElementById('ack-alerts').addEventListener('click', function () {
+                                // show details
+                                var detail = document.createElement('div');
+                                detail.className = 'fixed inset-0 bg-black/50 flex items-center justify-center';
+                                var card = document.createElement('div');
+                                card.className = 'bg-white p-4 rounded max-w-2xl w-full';
+                                var html = '<h3 class="text-lg font-bold mb-2">هشدارهای تایید نشده</h3>';
+                                html += '<ul class="space-y-2 mb-3">';
+                                data.forEach(function (a) { html += '<li>' + a.message + '</li>'; });
+                                html += '</ul>';
+                                html += '<div class="text-right"><button class="px-3 py-1 bg-blue-600 text-white rounded" id="close-alerts">بستن</button></div>';
+                                card.innerHTML = html;
+                                detail.appendChild(card);
+                                document.body.appendChild(detail);
+                                document.getElementById('close-alerts').addEventListener('click', function () { document.body.removeChild(detail); document.body.removeChild(bar); });
+                            });
+                        }
+                    }
+                }).catch(err => console.warn('poll error', err));
+                        }
+
+            function playBeep() {
+                try {
+                    var ctx = new (window.AudioContext || window.webkitAudioContext)();
+                    var o = ctx.createOscillator();
+                    var g = ctx.createGain();
+                    o.type = 'sine'; o.frequency.value = 880; g.gain.value = 0.05;
+                    o.connect(g); g.connect(ctx.destination); o.start(); setTimeout(function () { o.stop(); ctx.close(); }, 400);
+                } catch (e) { console.warn('beep failed', e); }
+            }
+
+            setInterval(pollAlerts, 20000); // poll every 20 seconds
+                    }
+                });
+
+            function getCookie(name) {
+                var v = document.cookie.match('(^|;) ?' + name + '=([^;]*)(;|$)');
+                return v ? v[2] : null;
+            }
+            }) ();
+        </script>
+    </div>
+</body>
+
+</html>

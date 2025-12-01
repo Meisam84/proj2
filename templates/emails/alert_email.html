@@ -1,0 +1,59 @@
+<!doctype html>
+<html lang="fa">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <style>
+        body {
+            font-family: "Tahoma", "Arial", sans-serif;
+            direction: rtl;
+        }
+
+        .container {
+            max-width: 680px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .header {
+            background: #0b5;
+            padding: 10px;
+            color: #fff
+        }
+
+        .content {
+            margin-top: 15px
+        }
+
+        .footer {
+            margin-top: 20px;
+            font-size: 12px;
+            color: #666
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <div class="header">
+            <strong>{{ site_name|default:"سامانه کنداکتور" }}</strong>
+        </div>
+
+        <div class="content">
+            <h3>{{ alert.get_trigger_display }}</h3>
+            <p>{{ alert.message }}</p>
+
+            {% if schedule and schedule.program_instance %}
+            <p><strong>برنامه:</strong> {{ schedule.program_instance.program.title }}</p>
+            <p><strong>زمان برنامه:</strong> {{ schedule.program_instance.scheduled_start }}</p>
+            {% endif %}
+        </div>
+
+        <div class="footer">
+            این ایمیل خودکار است — لطفاً به این آدرس پاسخ ندهید.
+        </div>
+    </div>
+</body>
+
+</html>
