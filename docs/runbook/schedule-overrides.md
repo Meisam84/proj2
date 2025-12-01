@@ -56,7 +56,7 @@ Contact
 ## Screenshots (placeholders)
 For quick visual guidance, example placeholder images are stored in `docs/runbook/assets/` and will be replaced by real screenshots when available.
 
-![Schedule list filters](assets/schedule_list_filters.png)
+![Schedule list](assets/schedule_list_filters.png)
 
 ![Bulk actions](assets/schedule_bulk_action_menu.png)
 
