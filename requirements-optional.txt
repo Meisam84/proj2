@@ -1,0 +1,12 @@
+## Optional runtime dependencies (WeasyPrint native deps and helpers)
+# These are not strictly required for the Django app to run, but are
+# recommended if you plan to generate PDFs with WeasyPrint in production
+# or in CI runners.
+
+# Python packages used by WeasyPrint
+cairocffi>=1.4
+tinycss2>=1.2
+html5lib>=1.1
+
+# On Windows / Linux you will also need system libraries (Cairo, Pango, GDK)
+# See: https://weasyprint.org/docs/install/

@@ -11,10 +11,20 @@ class ScheduleAdminActionsTests(TestCase):
         self.factory = RequestFactory()
         self.channel = Channel.objects.create(name="C", code="C1", program_type="radio")
         program = Program.objects.create(title="P", channel=self.channel, default_duration=timedelta(minutes=30))
-        pi1 = ProgramInstance.objects.create(program=program, scheduled_start=timezone.now(), scheduled_end=timezone.now()+timedelta(hours=1))
-        pi2 = ProgramInstance.objects.create(program=program, scheduled_start=timezone.now()+timedelta(days=1), scheduled_end=timezone.now()+timedelta(days=1, hours=1))
-        self.s1 = Schedule.objects.create(channel=self.channel, schedule_date=date.today(), program_instance=pi1, order=1)
-        self.s2 = Schedule.objects.create(channel=self.channel, schedule_date=date.today(), program_instance=pi2, order=2)
+        pi1 = ProgramInstance.objects.create(
+            program=program, scheduled_start=timezone.now(), scheduled_end=timezone.now() + timedelta(hours=1)
+        )
+        pi2 = ProgramInstance.objects.create(
+            program=program,
+            scheduled_start=timezone.now() + timedelta(days=1),
+            scheduled_end=timezone.now() + timedelta(days=1, hours=1),
+        )
+        self.s1 = Schedule.objects.create(
+            channel=self.channel, schedule_date=date.today(), program_instance=pi1, order=1
+        )
+        self.s2 = Schedule.objects.create(
+            channel=self.channel, schedule_date=date.today(), program_instance=pi2, order=2
+        )
         self.admin = ScheduleAdmin(Schedule, admin.site)
 
     def _make_request(self):

@@ -6,18 +6,36 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('programs', '0005_channelsettings_e2erun_e2eschedule'),
+        ("programs", "0005_channelsettings_e2erun_e2eschedule"),
     ]
 
     operations = [
         migrations.AddField(
-            model_name='schedule',
-            name='override_enable_email',
-            field=models.CharField(choices=[('inherit', 'وراثت (استفاده از تنظیمات سراسری)'), ('enabled', 'فعال'), ('disabled', 'غیرفعال')], default='inherit', max_length=10, verbose_name='بازنویسی: ایمیل'),
+            model_name="schedule",
+            name="override_enable_email",
+            field=models.CharField(
+                choices=[
+                    ("inherit", "وراثت (استفاده از تنظیمات سراسری)"),
+                    ("enabled", "فعال"),
+                    ("disabled", "غیرفعال"),
+                ],
+                default="inherit",
+                max_length=10,
+                verbose_name="بازنویسی: ایمیل",
+            ),
         ),
         migrations.AddField(
-            model_name='schedule',
-            name='override_enable_sms',
-            field=models.CharField(choices=[('inherit', 'وراثت (استفاده از تنظیمات سراسری)'), ('enabled', 'فعال'), ('disabled', 'غیرفعال')], default='inherit', max_length=10, verbose_name='بازنویسی: پیامک'),
+            model_name="schedule",
+            name="override_enable_sms",
+            field=models.CharField(
+                choices=[
+                    ("inherit", "وراثت (استفاده از تنظیمات سراسری)"),
+                    ("enabled", "فعال"),
+                    ("disabled", "غیرفعال"),
+                ],
+                default="inherit",
+                max_length=10,
+                verbose_name="بازنویسی: پیامک",
+            ),
         ),
     ]

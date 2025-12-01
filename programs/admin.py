@@ -236,6 +236,7 @@ class ScheduleAdmin(admin.ModelAdmin):
         "updated_at",
     )
     actions = ("export_schedule_xlsx", "export_schedule_pdf")
+
     # Bulk actions to apply per-schedule override values quickly and safely
     def _bulk_set_override(self, request, queryset, field_name, value):
         updated = queryset.update(**{field_name: value})
@@ -361,7 +362,9 @@ class ScheduleAdmin(admin.ModelAdmin):
         from .weasyprint_helper import HTML
 
         if HTML is None:
-            self.message_user(request, "WeasyPrint is not installed or missing native deps; cannot generate PDF", level="error")
+            self.message_user(
+                request, "WeasyPrint is not installed or missing native deps; cannot generate PDF", level="error"
+            )
             return
         if queryset.count() != 1:
             self.message_user(request, "لطفا تنها یک برنامه را انتخاب کنید تا خروجی PDF تولید شود.")

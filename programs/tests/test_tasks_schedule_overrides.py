@@ -92,7 +92,10 @@ class TaskScheduleOverrideTests(TestCase):
                 self.messages = FakeMessages()
 
         with patch.object(tasks_module, "TwilioClient", FakeClient):
-            with patch.dict(os.environ, {"TWILIO_ACCOUNT_SID": "sid", "TWILIO_AUTH_TOKEN": "token", "TWILIO_FROM_NUMBER": "+19999999999"}):
+            with patch.dict(
+                os.environ,
+                {"TWILIO_ACCOUNT_SID": "sid", "TWILIO_AUTH_TOKEN": "token", "TWILIO_FROM_NUMBER": "+19999999999"},
+            ):
                 res = tasks_module.send_alert_sms(alert.id)
 
         self.assertFalse(res.get("ok"))

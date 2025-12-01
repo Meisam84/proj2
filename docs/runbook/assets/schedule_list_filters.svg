@@ -1,0 +1,11 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="600">
+  <rect width="100%" height="100%" fill="#f3f4f6" />
+  <rect x="20" y="20" width="1160" height="60" fill="#111827" rx="6" />
+  <text x="40" y="60" font-size="22" fill="#fff" font-family="Arial, Helvetica, sans-serif">Admin: Schedule list (placeholder)</text>
+  <g fill="#374151" font-family="Arial, Helvetica, sans-serif">
+    <text x="40" y="120" font-size="18">Filters • Channel • Date • is_active</text>
+    <text x="40" y="150" font-size="16">Columns: program, scheduled_start, override_enable_email, override_enable_sms</text>
+  </g>
+  <rect x="40" y="180" width="1120" height="320" fill="#ffffff" stroke="#e5e7eb" rx="6" />
+  <text x="60" y="210" font-size="14" fill="#6b7280">[Placeholder for list rows — replace with real screenshot]</text>
+</svg>

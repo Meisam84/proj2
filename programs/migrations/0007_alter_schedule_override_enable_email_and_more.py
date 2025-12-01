@@ -6,18 +6,38 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('programs', '0006_schedule_override_enable_email_and_more'),
+        ("programs", "0006_schedule_override_enable_email_and_more"),
     ]
 
     operations = [
         migrations.AlterField(
-            model_name='schedule',
-            name='override_enable_email',
-            field=models.CharField(choices=[('inherit', 'وراثت (استفاده از تنظیمات سراسری)'), ('enabled', 'فعال'), ('disabled', 'غیرفعال')], default='inherit', help_text='سه\u200cحالته: وراثت -> استفاده از تنظیمات سراسری؛ فعال -> ارسال ایمیل اجباری؛ غیرفعال -> جلوگیری از ارسال ایمیل برای این برنامه\u200cریزی.', max_length=10, verbose_name='بازنویسی: ایمیل'),
+            model_name="schedule",
+            name="override_enable_email",
+            field=models.CharField(
+                choices=[
+                    ("inherit", "وراثت (استفاده از تنظیمات سراسری)"),
+                    ("enabled", "فعال"),
+                    ("disabled", "غیرفعال"),
+                ],
+                default="inherit",
+                help_text="سه\u200cحالته: وراثت -> استفاده از تنظیمات سراسری؛ فعال -> ارسال ایمیل اجباری؛ غیرفعال -> جلوگیری از ارسال ایمیل برای این برنامه\u200cریزی.",
+                max_length=10,
+                verbose_name="بازنویسی: ایمیل",
+            ),
         ),
         migrations.AlterField(
-            model_name='schedule',
-            name='override_enable_sms',
-            field=models.CharField(choices=[('inherit', 'وراثت (استفاده از تنظیمات سراسری)'), ('enabled', 'فعال'), ('disabled', 'غیرفعال')], default='inherit', help_text='سه\u200cحالته: وراثت -> استفاده از تنظیمات سراسری؛ فعال -> ارسال پیامک اجباری؛ غیرفعال -> جلوگیری از ارسال پیامک برای این برنامه\u200cریزی.', max_length=10, verbose_name='بازنویسی: پیامک'),
+            model_name="schedule",
+            name="override_enable_sms",
+            field=models.CharField(
+                choices=[
+                    ("inherit", "وراثت (استفاده از تنظیمات سراسری)"),
+                    ("enabled", "فعال"),
+                    ("disabled", "غیرفعال"),
+                ],
+                default="inherit",
+                help_text="سه\u200cحالته: وراثت -> استفاده از تنظیمات سراسری؛ فعال -> ارسال پیامک اجباری؛ غیرفعال -> جلوگیری از ارسال پیامک برای این برنامه\u200cریزی.",
+                max_length=10,
+                verbose_name="بازنویسی: پیامک",
+            ),
         ),
     ]

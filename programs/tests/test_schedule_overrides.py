@@ -20,7 +20,9 @@ class ScheduleOverrideTests(TestCase):
             scheduled_start=timezone.now(),
             scheduled_end=timezone.now() + timedelta(hours=1),
         )
-        self.schedule = Schedule.objects.create(channel=self.channel, schedule_date=date.today(), program_instance=pi, order=1)
+        self.schedule = Schedule.objects.create(
+            channel=self.channel, schedule_date=date.today(), program_instance=pi, order=1
+        )
 
     def test_defaults_when_no_channelsettings(self):
         # No ChannelSettings object exists: email should default True, sms defaults to True

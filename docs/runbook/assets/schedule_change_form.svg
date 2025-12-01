@@ -1,0 +1,11 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="600">
+  <rect width="100%" height="100%" fill="#f8fafc" />
+  <text x="40" y="60" font-size="22" fill="#0f172a" font-family="Arial, Helvetica, sans-serif">Schedule Change Form (placeholder)</text>
+  <rect x="40" y="90" width="1120" height="120" fill="#eef2ff" stroke="#c7d2fe" rx="6" />
+  <text x="60" y="140" font-size="16" fill="#1f2937">Per-schedule Notice: بازنویسی کانال‌ها — Schedule override precedence explained</text>
+  <rect x="40" y="230" width="1120" height="320" fill="#ffffff" stroke="#e5e7eb" rx="6" />
+  <text x="60" y="270" font-size="14" fill="#374151">Override fields:</text>
+  <text x="80" y="300" font-size="14" fill="#374151">override_enable_email: inherit | enabled | disabled</text>
+  <text x="80" y="330" font-size="14" fill="#374151">override_enable_sms: inherit | enabled | disabled</text>
+  <text x="60" y="480" font-size="12" fill="#6b7280">[Placeholder — replace with real admin change form screenshot]</text>
+</svg>
