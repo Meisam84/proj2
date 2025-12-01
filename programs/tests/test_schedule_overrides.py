@@ -1,7 +1,8 @@
 from django.test import TestCase
 
 from ..models import Schedule, Channel, Program, ProgramInstance, ChannelSettings
-from datetime import date, datetime, timedelta
+from datetime import date, timedelta
+from django.utils import timezone
 
 
 class ScheduleOverrideTests(TestCase):
@@ -16,8 +17,8 @@ class ScheduleOverrideTests(TestCase):
         )
         pi = ProgramInstance.objects.create(
             program=program,
-            scheduled_start=datetime.now(),
-            scheduled_end=datetime.now() + timedelta(hours=1),
+            scheduled_start=timezone.now(),
+            scheduled_end=timezone.now() + timedelta(hours=1),
         )
         self.schedule = Schedule.objects.create(channel=self.channel, schedule_date=date.today(), program_instance=pi, order=1)
 

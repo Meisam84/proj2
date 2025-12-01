@@ -111,6 +111,7 @@ CELERY_BEAT_SCHEDULE = {
 # Email settings (development defaults to console backend). Override via env.
 EMAIL_BACKEND = os.environ.get("DJANGO_EMAIL_BACKEND", "django.core.mail.backends.console.EmailBackend")
 DEFAULT_FROM_EMAIL = os.environ.get("DEFAULT_FROM_EMAIL", "no-reply@example.com")
+SITE_NAME = os.environ.get("SITE_NAME", "سامانه کنداکتور")
 
 # SMTP settings (optional override for production/dev via env)
 EMAIL_HOST = os.environ.get("EMAIL_HOST", "")

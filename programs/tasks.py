@@ -138,7 +138,7 @@ def send_alert_email(self, alert_id):
         context = {
             "alert": alert,
             "schedule": getattr(alert, "schedule", None),
-            "site_name": getattr(settings, "DEFAULT_FROM_EMAIL", "سامانه کنداکتور"),
+            "site_name": getattr(settings, "SITE_NAME", getattr(settings, "DEFAULT_FROM_EMAIL", "سامانه کنداکتور")),
         }
         html_message = render_to_string("emails/alert_email.html", context)
         text_message = render_to_string("emails/alert_email.txt", context)

@@ -14,10 +14,10 @@ try:
 except Exception:
     openpyxl = None
 
-try:
-    from weasyprint import HTML
-except Exception:
-    HTML = None
+# Avoid importing WeasyPrint at module import time because it prints
+# native-dependency diagnostic messages (and may require system libs).
+# Import it lazily inside the admin action where it's actually used.
+HTML = None
 from .models import (
     Alert,
     AnalyticsData,
@@ -356,8 +356,12 @@ class ScheduleAdmin(admin.ModelAdmin):
 
     def export_schedule_pdf(self, request, queryset):
         """Export selected schedule to PDF using WeasyPrint (if available)."""
+        # Import WeasyPrint lazily to avoid printing diagnostic messages
+        # during test discovery or when the admin module is imported.
+        from .weasyprint_helper import HTML
+
         if HTML is None:
-            self.message_user(request, "WeasyPrint is not installed; cannot generate PDF", level="error")
+            self.message_user(request, "WeasyPrint is not installed or missing native deps; cannot generate PDF", level="error")
             return
         if queryset.count() != 1:
             self.message_user(request, "لطفا تنها یک برنامه را انتخاب کنید تا خروجی PDF تولید شود.")

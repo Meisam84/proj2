@@ -1,0 +1,47 @@
+name: E2E Smoke (safe)
+
+on:
+  push:
+    branches:
+      - feature/**
+  workflow_dispatch: {}
+
+jobs:
+  e2e-smoke:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.11'
+
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          if [ -f requirements.txt ]; then pip install -r requirements.txt; fi
+
+      - name: Run migrations
+        env:
+          DJANGO_SETTINGS_MODULE: irib_programs.settings
+        run: |
+          python manage.py migrate --noinput
+
+      - name: Run unit tests
+        env:
+          DJANGO_SETTINGS_MODULE: irib_programs.settings
+        run: |
+          python manage.py test programs
+
+      - name: Run safe E2E smoke (email)
+        env:
+          DJANGO_SETTINGS_MODULE: irib_programs.settings
+          # Force a safe local email backend so no external emails are sent
+          EMAIL_BACKEND: django.core.mail.backends.locmem.EmailBackend
+          # Ensure Twilio is not used during this job
+          TWILIO_ACCOUNT_SID: ''
+          TWILIO_AUTH_TOKEN: ''
+        run: |
+          python manage.py send_test_alert --create --method=email
