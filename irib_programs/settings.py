@@ -80,6 +80,8 @@ USE_TZ = True
 
 STATIC_URL = "/static/"
 STATICFILES_DIRS = [BASE_DIR / "static"]
+# Where `collectstatic` will gather files for deployment
+STATIC_ROOT = BASE_DIR / "static_collected"
 
 # Celery configuration
 # Use Redis by default in development; can be overridden with environment vars
